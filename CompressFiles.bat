@@ -21,7 +21,7 @@ for %%a IN ("*.mp4") do (
 	set FileName_Out=!FileName_In!.mp4
 
 	:: Run ffmpeg
-	ffmpeg -i "%%a" -vcodec libx264 -crf 20 -r 25 "compressed\!FileName_OUT!" 
+	ffmpeg -i "%%a" -vcodec libx264 -crf 30 -r 25 -vf scale=1024:1024 "compressed\!FileName_OUT!"
 
 )
 pause
