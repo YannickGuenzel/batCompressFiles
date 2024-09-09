@@ -9,7 +9,7 @@ setlocal enabledelayedexpansion
 mkdir compressed
 
 :: Iterate over all files in the current folder that end with .mp4
-for %%a IN ("*.mp4") do (
+for %%a IN ("*.avi") do (
 
 	:: Get the current file name
 	set FileName_In=%%a
@@ -18,14 +18,11 @@ for %%a IN ("*.mp4") do (
 	set FileName_In=!FileName_In:~0,-4!
 
 	:: Concatenate original file name with "_compressed.mp4" to create the the output file's name
-	set FileName_Out=!FileName_In!.mp4
+	set FileName_Out=!FileName_In!.avi
 
 	:: Run ffmpeg
-	ffmpeg -i "%%a" -vcodec libx264 -crf 30 -r 25 -vf scale=1024:1024 "compressed\!FileName_OUT!"
+	:: crop=width:height:top_left_X:top_left_Y
+	ffmpeg -err_detect ignore_err -i "%%a" -vcodec libx264 -crf 20 -r 25 -vf "crop=1500:1500:1175:1" "compressed\!FileName_OUT!"
 
 )
 pause
-
-
-
-
