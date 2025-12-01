@@ -53,7 +53,7 @@ rem Input pattern
 set "INPUT_MASK=*.avi"
 
 rem Output directory
-set "OUT_DIR=compressed2"
+set "OUT_DIR=compressed"
 
 rem Video codec: choose between valid encoder options (e.g., libsvtav1 and libx264 (CPU / software encoders) or h264_nvenc and av1_nvenc (GPU / hardware encoders – NVIDIA)
 set "VIDEO_CODEC=libsvtav1"
