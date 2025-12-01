@@ -7,7 +7,7 @@ Compressed files will be saved in a new subfolder /compressed with the same file
 - FFMPEG              : ffmpeg executable name or full path.
 - INPUT_MASK          : glob for input files.
 - OUT_DIR             : output directory (relative to script directory).
-- VIDEO_CODEC         : libsvtav1 (default, slow but better compression) or libx264.
+- VIDEO_CODEC         : all valid encoders (e.g., libsvtav1 and libx264 (CPU / software encoders) or h264_nvenc and av1_nvenc (GPU / hardware encoders – NVIDIA)
 - CRF                 : constant rate factor (0–51, lower = higher quality, 17-18 visually lossless, default = 23).
 - FPS                 : output frame rate.
 - OVERWRITE_EXISTING  : 0 = skip existing outputs, 1 = overwrite them (default).
