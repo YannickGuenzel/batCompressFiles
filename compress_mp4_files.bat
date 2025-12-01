@@ -84,7 +84,7 @@ set "SCALE_EXPR=scale=1280:-1"
 
 rem --- Concatenation options ---
 rem Enable/disable concatenation of all successfully processed outputs
-set "ENABLE_CONCAT=1"
+set "ENABLE_CONCAT=0"
 rem Output file name inside OUT_DIR
 set "CONCAT_OUTPUT_NAME=all_merged.mp4"
 
