@@ -75,7 +75,7 @@ rem   SCALE_EXPR=scale=1280:-1             -> width=1280, preserve aspect
 rem   SCALE_EXPR=scale=-1:720              -> height=720, preserve aspect
 
 rem Enable/disable cropping
-set "ENABLE_CROP=1"
+set "ENABLE_CROP=0"
 set "CROP_EXPR=crop=1782:1782:1350:1360"
 
 rem Enable/disable scaling
