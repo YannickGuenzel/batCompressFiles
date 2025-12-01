@@ -1,5 +1,5 @@
 # batCompressFiles
-Batch file compressing of all .mp4 (compress_mp4_files.bat) or .avi (compress_avi_files.bat) files in the current folder using ffmpeg
+Batch file compressing of all .mp4 (compress_mp4_files.bat) or .avi (compress_avi_files.bat) files in the current folder using ffmpeg.
 Compressed files will be saved in a new subfolder /compressed with the same filename.
 
 ## Configuration
