@@ -8,7 +8,7 @@
 :: Behavior:
 ::   - Scans the current directory for files matching INPUT_MASK (default: *.avi).
 ::   - Encodes each file into OUT_DIR using a selectable video codec
-::     (libx264 or libsvtav1) with fixed CRF and FPS.
+::     (libx264 or libsvtav1) with fixed CRF.
 ::   - Optionally applies cropping and/or scaling via a -vf filter chain.
 ::   - Optionally concatenates all successfully processed outputs into one file
 ::     using ffmpeg’s concat demuxer (stream copy, no re-encode).
@@ -19,7 +19,6 @@
 ::   - OUT_DIR             : output directory (relative to script directory).
 ::   - VIDEO_CODEC         : libsvtav1 (default, slow but better compression) or libx264.
 ::   - CRF                 : constant rate factor (codec-dependent scale).
-::   - FPS                 : output frame rate.
 ::   - OVERWRITE_EXISTING  : 0 = skip existing outputs, 1 = overwrite them.
 ::   - ENABLE_CROP         : 0 = no crop, 1 = apply CROP_EXPR.
 ::   - CROP_EXPR           : ffmpeg crop expression (e.g. crop=1280:720:0:0).
@@ -56,11 +55,10 @@ rem Output directory
 set "OUT_DIR=compressed"
 
 rem Video codec: choose between valid encoder options (e.g., libsvtav1 and libx264 (CPU / software encoders) or h264_nvenc and av1_nvenc (GPU / hardware encoders – NVIDIA)
-set "VIDEO_CODEC=libsvtav1"
+set "VIDEO_CODEC=av1_nvenc"
 
 rem Quality / rate settings
 set "CRF=23"
-set "FPS=15"
 
 rem Overwrite behavior: 0 = skip existing outputs, 1 = overwrite (default)
 set "OVERWRITE_EXISTING=1"
@@ -75,16 +73,16 @@ rem   SCALE_EXPR=scale=1280:-1             -> width=1280, preserve aspect
 rem   SCALE_EXPR=scale=-1:720              -> height=720, preserve aspect
 
 rem Enable/disable cropping
-set "ENABLE_CROP=0"
-set "CROP_EXPR=crop=1280:720:0:0"
+set "ENABLE_CROP=1"
+set "CROP_EXPR=crop=1538:1538:1455:1505"
 
 rem Enable/disable scaling
-set "ENABLE_SCALE=0"
-set "SCALE_EXPR=scale=1280:-1"
+set "ENABLE_SCALE=1"
+set "SCALE_EXPR=scale=1500:1500"
 
 rem --- Concatenation options ---
 rem Enable/disable concatenation of all successfully processed outputs
-set "ENABLE_CONCAT=0"
+set "ENABLE_CONCAT=1"
 rem Output file name inside OUT_DIR
 set "CONCAT_OUTPUT_NAME=all_merged.avi"
 
@@ -105,7 +103,7 @@ echo Current directory: "%BASE_DIR%"
 echo Input mask: "%INPUT_MASK%"
 echo Output directory: "%OUT_DIR%"
 echo Video codec: %VIDEO_CODEC%
-echo CRF: %CRF%, FPS: %FPS%
+echo CRF: %CRF%
 echo.
 
 rem Basic codec sanity check
@@ -199,7 +197,7 @@ for %%F in (%INPUT_MASK%) do (
     ) else (
         "%FFMPEG%" -y -hide_banner -loglevel error -err_detect ignore_err ^
             -i "%%F" ^
-            -c:v %VIDEO_CODEC% -crf %CRF% -r %FPS% %VF_SWITCH% -c:a copy ^
+            -c:v %VIDEO_CODEC% -crf %CRF% %VF_SWITCH% -c:a copy ^
             "!OUT_PATH!"
 
         if errorlevel 1 (

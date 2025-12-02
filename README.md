@@ -9,7 +9,6 @@ Compressed files will be saved in a new subfolder /compressed with the same file
 - OUT_DIR             : output directory (relative to script directory).
 - VIDEO_CODEC         : all valid encoders (e.g., libsvtav1 and libx264 (CPU / software encoders) or h264_nvenc and av1_nvenc (GPU / hardware encoders – NVIDIA)
 - CRF                 : constant rate factor (0–51, lower = higher quality, 17-18 visually lossless, default = 23).
-- FPS                 : output frame rate.
 - OVERWRITE_EXISTING  : 0 = skip existing outputs, 1 = overwrite them (default).
 - ENABLE_CROP         : 0 = no crop, 1 = apply CROP_EXPR.
 - CROP_EXPR           : ffmpeg crop expression (e.g. crop=1280:720:0:0).
