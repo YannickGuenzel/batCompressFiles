@@ -16,3 +16,6 @@ Compressed files will be saved in a new subfolder /compressed with the same file
 - SCALE_EXPR          : ffmpeg scale expression (e.g. scale=1280:-1).
 - ENABLE_CONCAT       : 0 = no concat, 1 = concat all successful outputs.
 - CONCAT_OUTPUT_NAME  : final concatenated file name inside OUT_DIR.
+
+## GetCropParameters
+This small MATLAB script opens a video, shows its first frame for the user to click two points that define a rectangle to print a formatted bounding-box string for the configuration option "CROP_EXPR".

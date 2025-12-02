@@ -57,7 +57,7 @@ set "OUT_DIR=compressed"
 rem Video codec: choose between valid encoder options (e.g., libsvtav1 and libx264 (CPU / software encoders) or h264_nvenc and av1_nvenc (GPU / hardware encoders – NVIDIA)
 set "VIDEO_CODEC=av1_nvenc"
 
-rem Quality / rate settings
+rem Quality settings
 set "CRF=23"
 
 rem Overwrite behavior: 0 = skip existing outputs, 1 = overwrite (default)
