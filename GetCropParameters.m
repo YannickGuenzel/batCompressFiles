@@ -5,6 +5,11 @@
 % bounding-box string.
 clear; close all; clc; % Use clear instead of clear all for better performance
 
+% Settings
+% Set whether to accept rectangles (false) or use the center to enforece
+% the result is a square.
+SET.enforce_square = true;
+
 % Prompt user to select a video file
 [filename, pathname] = uigetfile({'*.mp4;*.avi'}, 'Select a video file');
 if isequal(filename, 0) || isequal(pathname, 0)
@@ -41,8 +46,21 @@ mask(yMin:yMax, xMin:xMax) = true;
 props = regionprops(mask, 'BoundingBox');
 if ~isempty(props)
     props = round(props.BoundingBox);
+    if SET.enforce_square == true
+        % Get parameters
+        w = max([xMax-xMin, yMax-yMin]);
+        h = max([xMax-xMin, yMax-yMin]);
+        center = [xMin+w/2, yMin+h/2];
+        corner = center - [w/2, h/2];
+    else
+        % Get parameters
+        w = xMax-xMin;
+        h = yMax-yMin;
+        center = [xMin+w/2, yMin+h/2];
+        corner = center - [w/2, h/2];
+    end
     % Display bounding box [width:height:x:y] as strings
-    disp([num2str(max(props(3:4))), ':', num2str(max(props(3:4))), ':', num2str(props(1)), ':', num2str(props(2))]);
+    disp([num2str(w), ':', num2str(h), ':', num2str(corner(1)), ':', num2str(corner(2))]);
 else
     disp('No bounding box properties found.');
 end
