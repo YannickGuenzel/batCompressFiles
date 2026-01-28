@@ -19,7 +19,7 @@ end
 
 % Get first frame
 videoObj = VideoReader(fullfile(pathname, filename));
-img = single(rgb2gray(read(videoObj, 1)));
+img = read(videoObj, 1);
 
 % Display the first frame
 hFig = figure('Units', 'normalized', 'Position', [0 0 1 1]);
