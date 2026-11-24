@@ -25,15 +25,27 @@ end
 % Check the search root before looking for experiments.
 assert(isfolder(mainFolder), 'Experiment root does not exist: %s', mainFolder);
 
-% Each metadata file identifies an experiment folder.
-matches = dir(fullfile(mainFolder, '**', 'metadata.yaml'));
+% Find candidate folders using both the original and renamed metadata filenames.
+matches = dir(fullfile(mainFolder, '**', '*metadata.yaml'));
 matches = matches(~[matches.isdir]);
 experimentFolders = unique({matches.folder});
 
 % Process each experiment in its own folder.
 for iFolder = 1:numel(experimentFolders)
-    % Find the NPZ chunks directly inside this experiment folder.
+    % Use the full folder name, including any dots, as the shared prefix.
     folderPath = experimentFolders{iFolder};
+    [~, baseName, suffix] = fileparts(folderPath);
+    prefix = [baseName suffix];
+    originalMetadata = fullfile(folderPath, 'metadata.yaml');
+    prefixedMetadata = fullfile(folderPath, [prefix '_metadata.yaml']);
+
+    % Accept only the original name or the exact prefixed name for this folder.
+    if ~isfile(originalMetadata) && ~isfile(prefixedMetadata)
+        % Ignore other YAML files returned by the wildcard search.
+        continue
+    end
+
+    % Find the NPZ chunks directly inside this experiment folder.
     files = dir(fullfile(folderPath, '*.npz'));
     files = files(~[files.isdir]);
     % Skip experiments that have no chunks to export.
@@ -63,11 +75,22 @@ for iFolder = 1:numel(experimentFolders)
         'Duplicate frame numbers in %s. Check for overlapping chunks.', folderPath);
 
     % Save the CSV alongside the NPZ files, using the experiment folder name.
-    [~, baseName, suffix] = fileparts(folderPath);
-    csvPath = fullfile(folderPath, [baseName suffix '_frameinfo.csv']);
+    csvPath = fullfile(folderPath, [prefix '_frameinfo.csv']);
     writetable(frameInfo, csvPath);
     fprintf('Wrote %d frames to %s\n', height(frameInfo), csvPath);
-end%iFolder
+
+    % Rename the original metadata after the CSV export succeeds.
+    if isfile(originalMetadata)
+        % Preserve both entries if the destination name is already in use.
+        if isfile(prefixedMetadata) || isfolder(prefixedMetadata)
+            % Report the conflict so the existing metadata can be reviewed.
+            warning('Metadata rename skipped because %s already exists.', prefixedMetadata);
+        else
+            % Move the YAML file within the experiment folder.
+            movefile(originalMetadata, prefixedMetadata);
+        end
+    end
+end
 
 % Read and validate the frame index from one NPZ archive.
 function [numbers, times] = readFrameChunk(npzPath)
@@ -86,4 +109,4 @@ function [numbers, times] = readFrameChunk(npzPath)
     % Normalize both arrays to columns before merging chunks.
     numbers = numbers(:);
     times = times(:);
-end%FCN:readFrameChunk
+end
