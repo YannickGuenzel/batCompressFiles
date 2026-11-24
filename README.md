@@ -19,5 +19,12 @@ Compressed files will be saved in a new subfolder /compressed with the same file
 - ENABLE_CONCAT       : 0 = no concat, 1 = concat all successful outputs.
 - CONCAT_OUTPUT_NAME  : final concatenated file name inside OUT_DIR.
 
-## GetCropParameters
+## Additional MATLAB scripts and functions
+### GetCropParameters
 This small MATLAB script opens a video, shows its first frame for the user to click two points that define a rectangle to print a formatted bounding-box string for the configuration option "CROP_EXPR".
+### runBatInSubfolders
+This small MATLAB function copies and runs a Windows batch file, e.g. compress_mp4_files.bat, in each immediatesubfolder. Example usage: runBatInSubfolders('C:\MyMainFolder', 'myscript.bat')
+### batchRename
+This small MATLAB function renames videos to match their folder names. For example, batchRename('data', 'all_merged.mp4') renames data/Exp01/compressed/all_merged.mp4 to data/Exp01/compressed/Exp01.mp4.
+### export_frame_info_csv
+This small MATLAB script finds experiment folders containing metadata.yaml, combines frame numbers and timestamps from their .npz files, and saves a CSV sorted by frame number in each folder.
